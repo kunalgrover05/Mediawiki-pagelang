@@ -1076,24 +1076,26 @@ class MysqlUpdater extends DatabaseUpdater {
 				false,
 				'Setting page language for existing pages'
 			);
-		}
+			// This part might not be needed as Brian Wolff suggested.
+			// Set the field as some value only if it is not the default wiki language.
+			/*
+			$page = $this->db->tableName( 'page' );
+			$res = $this->db->query( "
+				SELECT page_title, page_lang
+				FROM $page",
+				__METHOD__
+			);
 
-		$page = $this->db->tableName( 'page' );
-		$res = $this->db->query( "
-			SELECT page_title, page_lang
-			FROM $page",
-			__METHOD__
-		);
-
-		foreach ( $res as $row ) {
-			$lang = Title::newFromRow( $row )->getPageLanguage()->getCode();
-			$sql = "UPDATE $page
-					SET page_lang = '$lang'
-					WHERE page_title = '$row->page_title'";
-			
-			$this->db->query( $sql, __METHOD__ );
-			$this->output( "done.\n" );
+			foreach ( $res as $row ) {
+				$lang = Title::newFromRow( $row )->getPageLanguage()->getCode();
+				$sql = "UPDATE $page
+							SET page_lang = '$lang'
+							WHERE page_title = '$row->page_title'";
+				
+					$this->db->query( $sql, __METHOD__ );
+					$this->output( "done.\n" );
+			}
+			*/
 		}
 	}
-
 }
